@@ -27,6 +27,11 @@ export class Api {
     const headers = this.tokenHeaders.getHeaders();
     return this.http.post(`${this.baseUrl}/login`, loginData, {headers});
   }
+
+  //get rooms
+  getRooms():Observable<any>{
+    return this.http.get(`${this.baseUrl}/rooms`);
+  }
   
   
 }
