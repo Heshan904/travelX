@@ -1,27 +1,41 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, NgIf } from '@angular/common';
+import { Api } from '../../core/services/api';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule, CommonModule,NgIf],
+  imports: [FormsModule, CommonModule,NgIf,HttpClientModule],
   templateUrl: './register.html',
   styleUrl: './register.css',
+  providers: [Api]
 })
 export class Register {
   name: string = '';
   email: string = '';
   password: string = '';
+  phone: string = '';
   isSubmitted: boolean = false;
+
+  constructor(private api:Api){}
 
   // Submit registration form
   submitRegister() {
     this.isSubmitted = true;
-    if (this.isValidName(this.name) && this.isValidEmail(this.email) && this.isValidPassword(this.password)) {
-      console.log('Registering user:', { name: this.name, email: this.email });
+    if (
+      this.isValidName(this.name) &&
+      this.isValidEmail(this.email) &&
+      this.isValidPassword(this.password) &&
+      this.isValidPhone(this.phone)
+    ) {
+      console.log('Registering user:', { name: this.name, email: this.email, phone: this.phone });
       // TODO: Call API to register user
+      this.api.registerUser({name:this.name, email:this.email, password:this.password, phone:this.phone}).subscribe((res:any)=>{
+          console.log(res.message);
+        }
+      );
       
-      alert('Registration successful!');
       this.resetForm();
     }
   }
@@ -42,11 +56,18 @@ export class Register {
     return typeof pw === 'string' && pw.trim().length >= 6;
   }
 
+  // Validation: Phone number (10-15 digits)
+  isValidPhone(phone: string): boolean {
+    const clean = phone.replace(/\D/g, '');
+    return clean.length >= 10 && clean.length <= 15;
+  }
+
   // Reset form
   resetForm() {
     this.name = '';
     this.email = '';
     this.password = '';
+    this.phone = '';
     this.isSubmitted = false;
   }
 }

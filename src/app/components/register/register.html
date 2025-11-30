@@ -30,6 +30,27 @@
           </div>
         </div>
 
+        <!-- Phone Field -->
+        <div class="mb-3">
+          <label for="phone" class="form-label">Phone Number</label>
+          <input
+            type="tel"
+            class="form-control form-control-lg"
+            id="phone"
+            name="phone"
+            placeholder="+1 (555) 123-4567"
+            [(ngModel)]="phone"
+            required
+            pattern="[0-9\s\-\+\(\)]{10,15}"
+            #phoneField="ngModel"
+            [class.is-invalid]="isSubmitted && phoneField.invalid"
+          />
+          <div class="invalid-feedback d-block" *ngIf="isSubmitted && phoneField.invalid">
+            <span *ngIf="phoneField.errors?.['required']">Phone number is required</span>
+            <span *ngIf="phoneField.errors?.['pattern']">Please enter a valid phone number (10-15 digits)</span>
+          </div>
+        </div>
+
         <!-- Email Field -->
         <div class="mb-3">
           <label for="email" class="form-label">Email Address</label>
