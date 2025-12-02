@@ -26,6 +26,7 @@ export class Auth {
       console.log('Logging in with:', this.phoneNumber);
       // TODO: Call API to authenticate
       this.api.login({phone:this.phoneNumber, password:this.password}).subscribe((res:any)=>{
+        localStorage.setItem('token', res.token);
           console.log(res.message);
         }
       );

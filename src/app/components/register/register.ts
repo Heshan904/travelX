@@ -33,7 +33,7 @@ export class Register {
       console.log('Registering user:', { name: this.name, email: this.email, phone: this.phone });
       // TODO: Call API to register user
       this.api.registerUser({name:this.name, email:this.email, password:this.password, phone:this.phone}).subscribe((res:any)=>{
-          console.log(res.message);
+          alert(res.message[0]);
         }
       );
       

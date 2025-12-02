@@ -1,5 +1,17 @@
-import { CanActivateFn } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, CanActivateFn, GuardResult, MaybeAsync, Router, RouterStateSnapshot } from '@angular/router';
+import { TokenStorage } from '../services/token-storage';
+import { Injectable } from '@angular/core';
 
-export const authGuard: CanActivateFn = (route, state) => {
-  return true;
-};
+@Injectable({
+  providedIn: 'root',
+})
+export class AuthGuard implements CanActivate{
+  constructor(private auth:TokenStorage, private router:Router){}
+
+  canActivate():boolean {
+    if (this.auth.getToken()) return true;
+    alert('You are not authorized to access this page');
+    this.router.navigate(['/login']);
+    return false;
+}
+}
