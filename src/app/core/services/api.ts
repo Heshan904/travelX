@@ -27,6 +27,23 @@ export class Api {
     const headers = this.tokenHeaders.getHeaders();
     return this.http.post(`${this.baseUrl}/login`, loginData, {headers});
   }
+
+  //get rooms
+  getRooms():Observable<any>{
+    return this.http.get(`${this.baseUrl}/rooms`);
+  }
+
+  //add room
+  addRoom(roomData:any):Observable<any>{
+    const headers = this.tokenHeaders.getHeaders();
+    return this.http.post(`${this.baseUrl}/add-room`, roomData, {headers});
+  }
+
+  //delete room
+  deleteRoom(roomId:number):Observable<any>{
+    const headers = this.tokenHeaders.getHeaders();
+    return this.http.delete(`${this.baseUrl}/delete-room/${roomId}`, {headers});
+  }
   
   
 }

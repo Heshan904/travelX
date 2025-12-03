@@ -3,10 +3,11 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule, NgIf } from '@angular/common';
 import { Api } from '../../core/services/api';
 import { HttpClientModule } from '@angular/common/http';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule, CommonModule,NgIf,HttpClientModule],
+  imports: [FormsModule, CommonModule, NgIf, HttpClientModule, RouterLink],
   templateUrl: './register.html',
   styleUrl: './register.css',
   providers: [Api]
@@ -32,7 +33,7 @@ export class Register {
       console.log('Registering user:', { name: this.name, email: this.email, phone: this.phone });
       // TODO: Call API to register user
       this.api.registerUser({name:this.name, email:this.email, password:this.password, phone:this.phone}).subscribe((res:any)=>{
-          console.log(res.message);
+          alert(res.message[0]);
         }
       );
       
