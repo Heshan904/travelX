@@ -11,7 +11,7 @@ interface Room {
   price_per_night: number;
   capacity: number;
   imageUrl: string;
-  status: string;
+  status: string; 
 }
 
 @Component({

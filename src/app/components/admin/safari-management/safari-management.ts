@@ -18,7 +18,8 @@ interface Safari {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './safari-management.html',
-  styleUrls: ['./safari-management.css']
+  styleUrls: ['./safari-management.css'],
+  providers:[Api]
 })
 export class SafariManagementComponent {
   constructor(private api: Api) {}
@@ -47,8 +48,12 @@ export class SafariManagementComponent {
 
     if (this.editingId) {
       const index = this.safaris.findIndex(s => s.id === this.editingId);
+      this.api.updateSafariStatus(this.editingId, this.newSafari.status).subscribe((res:any)=>{
+          alert(res.message);
+        });
       if (index !== -1) {
         this.safaris[index] = { ...this.newSafari, id: this.editingId };
+        
       }
     } else {
       const newId = this.safaris.length > 0 ? Math.max(...this.safaris.map(s => s.id)) + 1 : 1;
@@ -93,5 +98,13 @@ export class SafariManagementComponent {
     this.showForm = false;
     this.editingId = null;
     this.isSubmitted = false;
+  }
+
+
+  ngOnInit() {
+    this.api.getSafariJeeps().subscribe((data: Safari[]) => {
+      this.safaris = data;
+      console.log('Fetched safaris:', this.safaris);  
+    });
   }
 }

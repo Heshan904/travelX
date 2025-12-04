@@ -35,13 +35,16 @@ export class VehicleManagement {
       if (this.editingId) {
         // Update vehicle
         const vehicle = this.vehicles.find(v => v.id === this.editingId);
+        this.api.updateVehicleStatus(this.editingId, this.newVehicle.status).subscribe((res:any)=>{
+          alert(res.message);
+        });
         if (vehicle) {
           Object.assign(vehicle, this.newVehicle);
         }
         this.editingId = null;
       } else {
         // Add new vehicle
-        
+        this.vehicles.push({ ...this.newVehicle, id: this.vehicles.length > 0 ? Math.max(...this.vehicles.map(v => v.id ?? 0)) + 1 : 1 });
         this.api.addVehicle(this.newVehicle).subscribe((res:any)=>{
           alert(res.message); 
         });
@@ -61,6 +64,9 @@ export class VehicleManagement {
   deleteVehicle(id?: number) {
     if (id == null) return;
     this.vehicles = this.vehicles.filter(v => v.id !== id);
+    this.api.deleteVehicle(id).subscribe((res:any)=>{
+      alert(res.message);
+    })
   }
 
   resetForm(form: NgForm) {
