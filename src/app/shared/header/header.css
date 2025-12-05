@@ -21,6 +21,9 @@
 .navbar .nav-link.active {
 	color: #0d6efd;
 }
+.d-none{
+	visibility: hidden;
+}
 @media (max-width: 576px) {
 	.brand-text { font-size: 1rem; }
 }

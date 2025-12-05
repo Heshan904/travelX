@@ -22,4 +22,10 @@ export class Admin {
   setActiveTab(tab: string) {
     this.activeTab = tab;
   }
+
+  logout(){
+    localStorage.removeItem('token');
+    alert('You have been logged out.');
+    window.location.reload();
+  }
 }

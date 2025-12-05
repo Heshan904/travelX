@@ -26,4 +26,11 @@ export class TokenStorage {
     return headers;
   }
   
+  getUserId(){
+    const token = this.getToken();
+    if(!token) return null;
+    const decodedToken:any = jwtDecode(token);
+    console.log(decodedToken['id']);
+    return decodedToken['id'];
+  }
 }
