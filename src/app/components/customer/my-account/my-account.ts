@@ -7,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrl: './my-account.css',
 })
 export class MyAccount {
+  logout(){
+    localStorage.removeItem('token');
+    alert('You have been logged out.');
+    window.location.reload();
+  }
 
 }

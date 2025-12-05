@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Safari } from './safari';
+import { PaymentProcessing } from './payment-processing';
 
-describe('Safari', () => {
-  let component: Safari;
-  let fixture: ComponentFixture<Safari>;
+describe('PaymentProcessing', () => {
+  let component: PaymentProcessing;
+  let fixture: ComponentFixture<PaymentProcessing>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Safari]
+      imports: [PaymentProcessing]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(Safari);
+    fixture = TestBed.createComponent(PaymentProcessing);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

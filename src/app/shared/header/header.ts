@@ -12,11 +12,7 @@ export class Header {
 
   constructor(private tokenStore: TokenStorage){}
 
-  logout(){
-    localStorage.removeItem('token');
-    alert('You have been logged out.');
-    window.location.reload();
-  }
+  
 
   myAccount(){
     if(this.tokenStore.getRole()==='admin'){
@@ -25,6 +21,9 @@ export class Header {
       window.location.href = '/my-account';
     }
   }
+  isLoggedIn(): boolean {
+    return this.tokenStore.getToken() !== null;
+  }
 
-
+ 
 }
