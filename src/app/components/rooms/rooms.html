@@ -9,7 +9,7 @@
       <div class="card h-100 room-card shadow-sm">
         <!-- Image -->
         <div class="card-img-container overflow-hidden">
-          <img [src]="room.image" alt="{{ room.name }}" class="card-img-top room-img" />
+          <img [src]="room.imageUrl" alt="{{ room.name }}" class="card-img-top room-img" />
           <div class="card-overlay">
             <span class="badge bg-success">{{ room.price }}</span>
           </div>
@@ -17,15 +17,13 @@
 
         <!-- Card Body -->
         <div class="card-body d-flex flex-column">
-          <h5 class="card-title fw-bold">{{ room.name }}</h5>
-          <p class="card-text text-muted small flex-grow-1">{{ room.description }}</p>
+          <h5 class="card-title fw-bold">{{ room.type }}</h5>
 
-          <!-- Amenities -->
-          <div class="room-amenities mb-3">
-            <span class="badge bg-light text-dark me-2" *ngFor="let amenity of room.amenities">
-              {{ amenity }}
-            </span>
-          </div>
+          <span [class.stBatchAvailable]="room.status=='available'? true : false" [class.stBatchBooked]="room.status=='booked'? true : false" class="badge mb-2">{{ room.status }}</span>
+
+          <p class="card-text text-muted small mb-2">{{ room.price_per_night }}</p>
+
+          <h3 class="card-title fw-bold mb-1"> Capacity: {{ room.capacity }}</h3>
 
           <!-- Rating -->
           <!-- <div class="room-rating mb-3">
@@ -37,8 +35,8 @@
         <!-- Footer with Buttons -->
         <div class="card-footer bg-white border-top">
           <div class="d-grid gap-2">
-            <button class="btn btn-success btn-sm fw-bold" (click)="openBooking(room)" data-bs-toggle="modal" data-bs-target="#bookingModal">Book Now</button>
-            <button class="btn btn-outline-success btn-sm fw-bold" (click)="shopMore(room)" data-bs-toggle="modal" data-bs-target="#bookingModal">Shop More</button>
+            <button class="btn btn-success btn-sm fw-bold" [disabled]="room.status === 'booked'? true : false" (click)="openBooking(room)" data-bs-toggle="modal" data-bs-target="#bookingModal">Book Now</button>
+            
           </div>
         </div>
       </div>
@@ -73,6 +71,11 @@
           </div>
 
           <div class="mb-3">
+            <span class="form-label d-block">Days: {{ getBookingDays() }}</span>
+            <span class="form-label d-block">Total: {{ getBookingTotal() | number:'1.0-2' }}</span>
+          </div>
+
+          <div class="mb-3">
             <label for="quantity" class="form-label">Quantity</label>
             <input type="number" id="quantity" name="quantity" class="form-control" [(ngModel)]="booking.quantity" required min="1" #qtyField="ngModel" />
             <div class="invalid-feedback d-block" *ngIf="isBookingSubmitted && qtyField.invalid">
@@ -83,6 +86,7 @@
 
           <div class="d-grid">
             <button type="submit" class="btn btn-primary">Confirm Booking</button>
+            <button type="submit" class="btn btn-success mt-2">Save and Shop More</button>
           </div>
         </form>
       </div>

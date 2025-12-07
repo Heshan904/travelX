@@ -1,83 +1,24 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf, NgFor } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
+import { Api } from '../../core/services/api';
+import { HttpClientModule } from '@angular/common/http';
+import { TokenStorage } from '../../core/services/token-storage';
 
 declare const bootstrap: any;
 
 @Component({
   selector: 'app-rooms',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, NgIf, NgFor, FormsModule,HttpClientModule],
   templateUrl: './rooms.html',
   styleUrls: ['./rooms.css'],
+  providers:[Api]
 })
 export class Rooms {
-  rooms = [
-    {
-      id: 1,
-      name: 'Deluxe Room',
-      price: '$89/night',
-      image: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=500&q=60',
-      description: 'Spacious room with queen bed and city view',
-      amenities: ['WiFi', 'AC', 'TV']
-    },
-    {
-      id: 2,
-      name: 'Standard Room',
-      price: '$59/night',
-      image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=500&q=60',
-      description: 'Comfortable room perfect for business travelers',
-      amenities: ['WiFi', 'AC', 'Desk']
-    },
-    {
-      id: 3,
-      name: 'Suite Room',
-      price: '$149/night',
-      image: 'https://images.unsplash.com/photo-1582719268335-721e3798ae60?auto=format&fit=crop&w=500&q=60',
-      description: 'Luxury suite with separate living area',
-      amenities: ['WiFi', 'Spa', 'Kitchen']
-    },
-    {
-      id: 4,
-      name: 'Budget Room',
-      price: '$39/night',
-      image: 'https://images.unsplash.com/photo-1574484284002-952386ff8248?auto=format&fit=crop&w=500&q=60',
-      description: 'Cozy room with essential amenities',
-      amenities: ['WiFi', 'AC', 'Shower']
-    },
-    {
-      id: 5,
-      name: 'Twin Room',
-      price: '$79/night',
-      image: 'https://images.unsplash.com/photo-1591088398332-8c5ecd7b1810?auto=format&fit=crop&w=500&q=60',
-      description: 'Twin beds, perfect for friends or colleagues',
-      amenities: ['WiFi', 'AC', 'Desk']
-    },
-    {
-      id: 6,
-      name: 'Ocean View Room',
-      price: '$129/night',
-      image: 'https://images.unsplash.com/photo-1578500494198-246f612d03b3?auto=format&fit=crop&w=500&q=60',
-      description: 'Stunning ocean view with balcony',
-      amenities: ['WiFi', 'Balcony', 'Minibar']
-    },
-    {
-      id: 7,
-      name: 'Family Room',
-      price: '$119/night',
-      image: 'https://images.unsplash.com/photo-1598301257097-aa60ebb46840?auto=format&fit=crop&w=500&q=60',
-      description: 'Spacious room for families with kids',
-      amenities: ['WiFi', 'Kitchen', 'Playarea']
-    },
-    {
-      id: 8,
-      name: 'Honeymoon Suite',
-      price: '$199/night',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=500&q=60',
-      description: 'Romantic suite with jacuzzi and rose petals',
-      amenities: ['WiFi', 'Jacuzzi', 'Champagne']
-    }
-  ];
+  isBooked: boolean = false;
+  constructor(private api:Api,private tokenStore:TokenStorage){}
+  rooms:any[] = [];
 
   // Booking state
   selectedRoom: any = null;
@@ -96,8 +37,9 @@ export class Rooms {
   submitBooking(form: NgForm) {
     this.isBookingSubmitted = true;
     if (form.valid) {
-      console.log('Booking submitted for', this.selectedRoom?.name, this.booking);
-      alert(`Booking confirmed for ${this.selectedRoom?.name} (${this.booking.quantity})`);
+      const user_id = this.tokenStore.getUserId();
+
+      
       // close modal
       const modalEl = document.getElementById('bookingModal');
       if (modalEl) {
@@ -110,5 +52,38 @@ export class Rooms {
   shopMore(room: any) {
     // reuse modal for shop more (view details + booking)
     this.openBooking(room);
+  }
+
+  /**
+   * Calculate number of days between booking.start_date and booking.end_date.
+   * Returns 0 if either date is missing. Minimum 1 day when both dates present.
+   */
+  getBookingDays(): number {
+    const { start_date, end_date } = this.booking;
+    if (!start_date || !end_date) return 0;
+    const start = new Date(start_date);
+    const end = new Date(end_date);
+    const msPerDay = 1000 * 60 * 60 * 24;
+    const diffMs = end.getTime() - start.getTime();
+    const days = Math.ceil(diffMs / msPerDay);
+    return Math.max(1, days);
+  }
+
+  /**
+   * Calculate total price using selectedRoom price_per_night, booking days and quantity
+   */
+  getBookingTotal(): number {
+    if (!this.selectedRoom) return 0;
+    const days = this.getBookingDays();
+    const price = this.selectedRoom.price_per_night || this.selectedRoom.price || 0;
+    const qty = this.booking.quantity || 1;
+    return price * days * qty;
+  }
+
+  ngOnInit(){
+    this.api.getRooms().subscribe((data: any) => {
+      console.log('Fetched rooms:', data);
+      this.rooms = data;
+    });
   }
 }
