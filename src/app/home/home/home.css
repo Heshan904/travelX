@@ -69,7 +69,22 @@
 .h1para{
 	font-size: 2rem;
 	color: white;
+  opacity: 0;
+  transform: translateX(100px); /* start from the right */
+  animation: slideIn 0.8s ease-out forwards;
 }
+
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 .section-title {
 	font-size: 4rem;
 	font-weight: 700;
@@ -126,10 +141,7 @@
   transform: translateY(0);
 }
 
-/* ============================
-   DESKTOP — ALWAYS SHOW GALLERY
-============================ */
-@media (min-width: 769px) {
+
   .animated-gallery {
     max-height: none !important;
     opacity: 1 !important;
@@ -139,36 +151,28 @@
 
   .gallery {
     column-count: 4;
-    column-gap: 2rem;
-    padding: 3rem;
-  }
-}
-
-/* ============================
-   MOBILE VIEW
-============================ */
-@media (max-width: 768px) {
-
-  .mobile-cover {
-    display: block;
-    padding: 1rem;
-  }
-
-  .gallery {
-    column-count: 2;
-    padding: 1rem;
     column-gap: 1rem;
+    padding: 2rem;
   }
-
-  .gallery img {
-    border-radius: 0.7rem;
+  @media (max-width: 1200px) {
+    .gallery {
+      column-count: 4;
+    }
   }
-
-  .gallery img:hover {
-    transform: none;
+  @media (max-width: 768px) {
+    .gallery {
+      column-count: 3;
+      column-gap: 0.5rem;
+      padding: 1rem;
+    }
   }
-}
-
+  @media (max-width: 480px) {
+    .gallery {
+      column-count: 2;
+      column-gap: 0.5rem;
+      padding: 1rem;
+    }
+  }
 /* DEFAULT IMAGE STYLE */
 .gallery img {
   width: 100%;

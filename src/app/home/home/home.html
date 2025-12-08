@@ -66,12 +66,9 @@
 
     <div class="sectionthree">
       <h1 style="display: flex; justify-content: right; font-size: 4rem; color: rgb(0, 252, 76); margin-right: 6rem;">Gallery</h1>
-      <div class="mobile-cover" (click)="toggleGallery()" *ngIf="!isExpanded">
-        <img [src]="images[0]" class="cover-img" />
-      </div>
 
       <div class="gallery animated-gallery" [class.expanded]="isExpanded">
-        <img *ngFor="let img of images" [src]="img" />
+        <img *ngFor="let img of images" [src]="img" alt="Gallery image"/>
       </div>
 
 
