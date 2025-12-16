@@ -1,7 +1,8 @@
 <nav class="navbar navbar-expand-lg shadow-sm">
 	<div class="container">
 		<a class="navbar-brand d-flex align-items-center" href="#">
-			<a class="nav-link active" [routerLink]="['/home']"><span class="brand-text">Primrose Safari</span></a>
+			<!-- <img src="/assets/logo.png" alt="PrimRose" class="me-2 header-logo" onerror="this.src='https://via.placeholder.com/40'"/> -->
+			<span class="brand-text">PrimRose</span>
 		</a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
@@ -11,9 +12,13 @@
 				<li class="nav-item"><a class="nav-link" [routerLink]="['/gallery']">Gallery</a></li>
 				<li class="nav-item"><a class="nav-link" [routerLink]="['/about']">About</a></li>
 				<li class="nav-item"><a class="nav-link" [routerLink]="['/contact']">Contact</a></li>
+				
 			</ul>
-			<div class="d-flex">
-				<img src="https://res.cloudinary.com/doawbwzbs/image/upload/v1764444459/shopping-cart-icon-29079_surasr.png" alt="" class="cart-icon"/>
+			<div class="d-flex align-items-center">
+				
+				<a class="nav-link" (click)="myAccount()" [class.d-none]="!isLoggedIn()"><i class="bi bi-person-circle">🦁</i>My Account</a>
+				<a class="btn btn-outline-primary me-2" [class.d-none]="isLoggedIn()" [routerLink]="['/auth']">Sign In</a>
+				<a class="btn btn-outline-primary me-2" [class.d-none]="isLoggedIn()"  [routerLink]="['/register']">Register</a>
 			</div>
 		</div>
 	</div>
